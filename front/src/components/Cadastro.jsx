@@ -2,24 +2,31 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import "./styles.css";
 
-const Login = ({ onLogin }) => {
+const Cadastro = () => {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = (e) => {
+  const handleRegister = (e) => {
     e.preventDefault();
-    // 🔥 Aqui você pode adicionar lógica de autenticação com backend
-    if (email === email && password === password) {
-      onLogin(); // Altera o estado de autenticação no App.js
-    } else {
-      alert("Credenciais inválidas!");
-    }
+    // 🔥 Aqui você pode enviar os dados para um backend (se aplicável)
+    console.log("Usuário cadastrado:", { name, email, password });
+    alert("Cadastro realizado com sucesso!");
   };
 
   return (
     <div className="auth-container">
-      <h2>Login</h2>
-      <form onSubmit={handleLogin}>
+      <h2>Cadastro</h2>
+      <form onSubmit={handleRegister}>
+        <label>
+          Nome:
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+        </label>
         <label>
           E-mail:
           <input
@@ -38,13 +45,13 @@ const Login = ({ onLogin }) => {
             required
           />
         </label>
-        <button type="submit">Entrar</button>
+        <button type="submit">Cadastrar</button>
       </form>
       <p>
-        Não tem uma conta? <Link to="/cadastro">Cadastre-se</Link>
+        Já tem uma conta? <Link to="/login">Faça login</Link>
       </p>
     </div>
   );
 };
 
-export default Login;
+export default Cadastro;

@@ -1,43 +1,72 @@
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+// import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+// import AdicionarGasto from "./AdicionarGasto";
+// import ListaGastos from "./ListaGastos";
+// import GraficoGastos from "./GraficoGastos";
+// import Cadastro from "./Cadastro"
+// import "./styles.css"; // 🔥 Importação do CSS
 
+// const App = () => {
+  
+//   return (
+//     <Router>
+      
+//       <nav>
+//         <Link to="/">Adicionar Gasto</Link>
+//         <Link to="/lista">Lista de Gastos</Link>
+//         <Link to="/relatorios">Relatórios</Link>
+//       </nav>
+//       <div className="container">
+//         <Routes>
+//           <Route path="/" element={<AdicionarGasto />} />
+//           <Route path="/lista" element={<ListaGastos />} />
+//           <Route path="/relatorios" element={<GraficoGastos />} />
+          
+//         </Routes>
+//         {/* <Cadastro /> */}
+//       </div>
+//     </Router>
+//   );
+// };
+
+// export default App;
+
+import { BrowserRouter as Router, Routes, Route, Navigate, Link } from "react-router-dom";
+import { useState } from "react";
 import AdicionarGasto from "./AdicionarGasto";
 import ListaGastos from "./ListaGastos";
 import GraficoGastos from "./GraficoGastos";
 import Login from "./Login";
-import Register from "./Register";
+import Cadastro from "./Cadastro";
 import "./styles.css";
 
 const App = () => {
-  const { token, logout } = useAuth();
+  const [isAuthenticated, setIsAuthenticated] = useState(false); // Estado de autenticação
 
   return (
     <Router>
-      {!token ? (
-        <div>
-          <h1>Bem-vindo!</h1>
-          <Link to="/login">Login</Link> | <Link to="/register">Cadastro</Link>
-          <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-          </Routes>
-        </div>
+      {!isAuthenticated ? (
+        <Routes>
+          <Route path="/login" element={<Login onLogin={() => setIsAuthenticated(true)} />} />
+          <Route path="/cadastro" element={<Cadastro />} />
+          <Route path="*" element={<Navigate to="/login" />} />
+        </Routes>
       ) : (
-        <div>
+        <>
           <nav>
             <Link to="/">Adicionar Gasto</Link>
             <Link to="/lista">Lista de Gastos</Link>
             <Link to="/relatorios">Relatórios</Link>
-            <button onClick={logout}>Sair</button>
+            <button onClick={() => setIsAuthenticated(false)}>Sair</button>
           </nav>
           <div className="container">
             <Routes>
               <Route path="/" element={<AdicionarGasto />} />
               <Route path="/lista" element={<ListaGastos />} />
               <Route path="/relatorios" element={<GraficoGastos />} />
+              <Route path="*" element={<Navigate to="/" />} />
             </Routes>
           </div>
-        </div>
+        </>
       )}
     </Router>
   );
