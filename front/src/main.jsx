@@ -1,12 +1,12 @@
-import React from "react";
-import { createRoot } from "react-dom/client"; // Correção na importação
-import App from "./components/App";
-import { GastosProvider } from "./components/GastosContext";
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './components/App';
+import { AuthProvider } from './context/AuthContext';
 
-createRoot(document.getElementById("root")).render(
+ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <GastosProvider>
+    <AuthProvider>
       <App />
-    </GastosProvider>
+    </AuthProvider>
   </React.StrictMode>
 );
