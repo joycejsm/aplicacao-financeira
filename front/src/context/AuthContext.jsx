@@ -7,7 +7,7 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setLoading(false); // Simula o carregamento inicial, pode ser ajustado se for buscar do backend
+    setLoading(false);
   }, []);
 
   const login = (newToken) => {
