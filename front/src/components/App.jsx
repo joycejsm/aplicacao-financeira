@@ -1,12 +1,11 @@
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-
+import Register from "./Register";
+import Login from "./Login";
 import AdicionarGasto from "./AdicionarGasto";
 import ListaGastos from "./ListaGastos";
 import GraficoGastos from "./GraficoGastos";
-import Login from "./Login";
-import Register from "./Register";
-import "./styles.css";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import "../styles.css";
 
 const App = () => {
   const { token, logout } = useAuth();
@@ -30,13 +29,11 @@ const App = () => {
             <Link to="/relatorios">Relatórios</Link>
             <button onClick={logout}>Sair</button>
           </nav>
-          <div className="container">
-            <Routes>
-              <Route path="/" element={<AdicionarGasto />} />
-              <Route path="/lista" element={<ListaGastos />} />
-              <Route path="/relatorios" element={<GraficoGastos />} />
-            </Routes>
-          </div>
+          <Routes>
+            <Route path="/" element={<AdicionarGasto />} />
+            <Route path="/lista" element={<ListaGastos />} />
+            <Route path="/relatorios" element={<GraficoGastos />} />
+          </Routes>
         </div>
       )}
     </Router>
@@ -44,4 +41,3 @@ const App = () => {
 };
 
 export default App;
-
