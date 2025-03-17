@@ -14,7 +14,3 @@ model Gasto {
   categoria String
   data      DateTime @default(now())
 }
-
-model User {
-  
-}
