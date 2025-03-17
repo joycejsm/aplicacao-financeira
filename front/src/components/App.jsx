@@ -1,11 +1,11 @@
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import { useAuth } from "./context/AuthContext";
+import { useAuth } from "../context/AuthContext";
 
 import AdicionarGasto from "./AdicionarGasto";
 import ListaGastos from "./ListaGastos";
 import GraficoGastos from "./GraficoGastos";
-import Login from "./components/Login";
-import Register from "./components/Register";
+import Login from "./Login";
+import Register from "./Register";
 import "./styles.css";
 
 const App = () => {
