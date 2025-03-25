@@ -69,7 +69,10 @@ app.delete("/gastos/:id", async (req, res) => {
     }
   });
   
-
+app.get("/", (req, res) => {
+  res.send("API da aplicação financeira está rodando!");
+});
+  
 // Inicia o servidor
 app.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);
