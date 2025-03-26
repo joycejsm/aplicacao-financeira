@@ -6,7 +6,7 @@ export const GastosContext = createContext();
 export const GastosProvider = ({ children }) => {
   const [gastos, setGastos] = useState([]);
 
-  // Carregar os gastos do backend ao iniciar
+  // 🔹 Carregar os gastos do backend ao iniciar
   useEffect(() => {
     const fetchGastos = async () => {
       try {
@@ -20,7 +20,7 @@ export const GastosProvider = ({ children }) => {
     fetchGastos();
   }, []);
 
-  // Função para adicionar gasto no backend
+  // 🔹 Função para adicionar gasto no backend
   const adicionarGasto = async (novoGasto) => {
     try {
       const response = await api.post("/gastos", novoGasto);
