@@ -38,15 +38,16 @@ import GraficoGastos from "./GraficoGastos";
 import Login from "./Login";
 import Cadastro from "./Cadastro";
 import "./styles.css";
+import { useAuth } from "../AuthContext.jsx";
 
 const App = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false); // Estado de autenticação
+  const{user, logout} = useAuth(); // Estado de autenticação
 
   return (
     <Router>
-      {!isAuthenticated ? (
+      {!user ? (
         <Routes>
-          <Route path="/login" element={<Login onLogin={() => setIsAuthenticated(true)} />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/cadastro" element={<Cadastro />} />
           <Route path="*" element={<Navigate to="/login" />} />
         </Routes>
@@ -56,7 +57,7 @@ const App = () => {
             <Link to="/">Adicionar Gasto</Link>
             <Link to="/lista">Lista de Gastos</Link>
             <Link to="/relatorios">Relatórios</Link>
-            <button onClick={() => setIsAuthenticated(false)}>Sair</button>
+            <button onClick={logout}>Sair</button>
           </nav>
           <div className="container">
             <Routes>
