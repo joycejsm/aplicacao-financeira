@@ -10,6 +10,7 @@ app.use(cors()); // DIFERENTE (Libera o acesso do frontend, VAMOS VER MAIS NA FR
 const PORT = 3001; //Aqui eu defino a porta
 app.use(express.json()); // Permite que a API receba JSON
 
+const authRoutes = require('./routes/auth');
 
 // Rota para listar todos os gastos
 app.get("/gastos", async (req, res) => {
