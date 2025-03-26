@@ -13,13 +13,14 @@ model Gasto {
   descricao        String
   valor            Float
   categoria        String
-  payerId          String
-  payer            User     @relation("Pagador", fields: [payerId], references: [id])
-  beneficiarioId   Int
-  beneficiario     User     @relation("Beneficiario", fields: [beneficiarioId], references: [id])
+  payerId          Int?     // <- Tornar Opcional
+  payer            User?     @relation("Pagador", fields: [payerId], references: [id])
+  beneficiarioId   Int?     // <- Tornar Opcional
+  beneficiario     User?     @relation("Beneficiario", fields: [beneficiarioId], references: [id])
   compartilhadoCom GastoCompartilhado[]
   data             DateTime @default(now())
 }
+
 
 model User {
   id                 Int       @id @default(autoincrement())
