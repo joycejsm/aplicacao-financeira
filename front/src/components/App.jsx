@@ -7,39 +7,38 @@ import GraficoGastos from "./GraficoGastos";
 import Login from "./Login";
 import Cadastro from "./Cadastro";
 import "./styles.css";
+import { useAuth } from "../AuthContext.jsx";
 
 const App = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false); // Estado de autenticação
+  const{user, logout} = useAuth(); // Estado de autenticação
 
   return (
-    <AuthProvider> {/* Envolva o Router com o AuthProvider */}
-      <Router>
-        {!isAuthenticated ? (
-          <Routes>
-            <Route path="/login" element={<Login onLogin={() => setIsAuthenticated(true)} />} />
-            <Route path="/cadastro" element={<Cadastro />} />
-            <Route path="*" element={<Navigate to="/login" />} />
-          </Routes>
-        ) : (
-          <>
-            <nav>
-              <Link to="/">Adicionar Gasto</Link>
-              <Link to="/lista">Lista de Gastos</Link>
-              <Link to="/relatorios">Relatórios</Link>
-              <button onClick={() => setIsAuthenticated(false)}>Sair</button>
-            </nav>
-            <div className="container">
-              <Routes>
-                <Route path="/" element={<AdicionarGasto />} />
-                <Route path="/lista" element={<ListaGastos />} />
-                <Route path="/relatorios" element={<GraficoGastos />} />
-                <Route path="*" element={<Navigate to="/" />} />
-              </Routes>
-            </div>
-          </>
-        )}
-      </Router>
-    </AuthProvider>
+    <Router>
+      {!user ? (
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/cadastro" element={<Cadastro />} />
+          <Route path="*" element={<Navigate to="/login" />} />
+        </Routes>
+      ) : (
+        <>
+          <nav>
+            <Link to="/">Adicionar Gasto</Link>
+            <Link to="/lista">Lista de Gastos</Link>
+            <Link to="/relatorios">Relatórios</Link>
+            <button onClick={logout}>Sair</button>
+          </nav>
+          <div className="container">
+            <Routes>
+              <Route path="/" element={<AdicionarGasto />} />
+              <Route path="/lista" element={<ListaGastos />} />
+              <Route path="/relatorios" element={<GraficoGastos />} />
+              <Route path="*" element={<Navigate to="/" />} />
+            </Routes>
+          </div>
+        </>
+      )}
+    </Router>
   );
 };
 

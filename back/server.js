@@ -2,18 +2,47 @@ const express = require("express"); // Importa o express
 const app = express(); // Instancia o express
 const { PrismaClient } = require("@prisma/client"); // Importa o Prisma Client
 const prisma = new PrismaClient(); // Instancia o Prisma Client
-const cors = require("cors"); // Importa o CORS
 const bcrypt = require("bcrypt"); // Para hash de senhas
 const jwt = require("jsonwebtoken"); // Para gerar tokens JWT
 
-app.use(cors()); // Libera o acesso do frontend
-const PORT = 3001; // Define a porta
+
+
+const cors = require("cors"); //DIFERENTE
+app.use(cors()); // DIFERENTE (Libera o acesso do frontend, VAMOS VER MAIS NA FRENTE)
+
+const PORT = 5000; //Aqui eu defino a porta
 app.use(express.json()); // Permite que a API receba JSON
 
-// Rota para listar todos os gastos
-app.get("/gastos", async (req, res) => {
+const authenticateUser = async (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader) {
+    return res.status(401).json({ error: "Não autorizado" });
+  }
+
   try {
-    const gastos = await prisma.gasto.findMany();
+    const token = authHeader.split(" ")[1];
+    // Aqui você deve validar o token JWT
+    // Exemplo simplificado:
+    const user = await prisma.user.findFirst({
+      where: { id: parseInt(token) } // Isso é apenas exemplo - use JWT na prática
+    });
+    if (!user) {
+      return res.status(401).json({ error: "Não autorizado" });
+    }
+
+    req.user = user;
+    next();
+  } catch (error) {
+    res.status(500).json({ error: "Erro de autenticação" });
+  }
+  }
+
+// Rota para listar todos os gastos
+app.get("/gastos", authenticateUser, async (req, res) => {
+  try {
+    const gastos = await prisma.gasto.findMany({
+      where: { userId: req.user.id }
+    });
     res.json(gastos);
   } catch (error) {
     res.status(500).json({ error: "Erro ao buscar gastos" });
@@ -21,69 +50,87 @@ app.get("/gastos", async (req, res) => {
 });
 
 // Rota para buscar um gasto por ID
-app.get("/gastos/:id", async (req, res) => {
+app.get("/gastos/:id", authenticateUser, async (req, res) => {
   try {
     const { id } = req.params;
-    const gasto = await prisma.gasto.findUnique({ where: { id } });
+
+    // Busca o gasto verificando se pertence ao usuário
+    const gasto = await prisma.gasto.findFirst({
+      where: { 
+        id,
+        userId: req.user.id 
+      }
+    });
+
     if (!gasto) {
-      return res.status(404).json({ error: "Gasto não encontrado" });
+      return res.status(404).json({ 
+        error: "Gasto não encontrado ou não pertence ao usuário" 
+      });
     }
     res.json(gasto);
   } catch (error) {
-    res.status(500).json({ error: "Erro ao buscar gasto" });
+    console.error("Erro ao buscar gasto:", error);
+    res.status(500).json({ 
+      error: "Erro ao buscar gasto",
+      details: error.message 
+    });
   }
 });
 
 // Rota para adicionar um novo gasto
-app.post("/gastos", async (req, res) => {
+app.post("/gastos", authenticateUser, async (req, res) => {
   try {
     const { descricao, valor, categoria, data } = req.body;
     const novoGasto = await prisma.gasto.create({
-      data: { descricao, valor: parseFloat(valor), categoria, data: new Date(data) },
+      data: { 
+        descricao, 
+        valor: parseFloat(valor), 
+        categoria, 
+        data: data ? new Date(data) : new Date(),
+        userId: req.user.id 
+      },
     });
     res.status(201).json(novoGasto);
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: "Erro ao adicionar gasto" });
   }
 });
 
 // Rota para excluir um gasto por ID
-app.delete("/gastos/:id", async (req, res) => {
+app.delete("/gastos/:id", authenticateUser, async (req, res) => {
   try {
     const { id } = req.params;
-    const gastoExiste = await prisma.gasto.findUnique({ where: { id } });
-    if (!gastoExiste) {
-      return res.status(404).json({ error: "Gasto não encontrado" });
+    
+    // Verifica se o gasto existe e pertence ao usuário
+    const gasto = await prisma.gasto.findFirst({
+      where: { 
+        id,
+        userId: req.user.id 
+      }
+    });
+
+    if (!gasto) {
+      return res.status(404).json({ 
+        error: "Gasto não encontrado ou não pertence ao usuário" 
+      });
     }
-    await prisma.gasto.delete({ where: { id } });
-    res.json({ message: "Gasto excluído com sucesso!" });
+
+    await prisma.gasto.delete({ 
+      where: { id } 
+    });
+
+    res.json({ 
+      success: true,
+      message: "Gasto excluído com sucesso!" 
+    });
   } catch (error) {
-    res.status(500).json({ error: "Erro ao excluir gasto" });
+    console.error("Erro ao excluir gasto:", error);
+    res.status(500).json({ 
+      error: "Erro ao excluir gasto",
+      details: error.message 
+    });
   }
-});
-
-// Rota para login
-app.post("/login", async (req, res) => {
-  const { email, password } = req.body;
-
-  const user = await prisma.user.findUnique({ where: { email } });
-  if (!user) {
-    return res.status(401).json({ error: "Usuário não encontrado" });
-  }
-
-  const isPasswordValid = await bcrypt.compare(password, user.password);
-  if (!isPasswordValid) {
-    return res.status(401).json({ error: "Senha inválida" });
-  }
-
-  // Gerar token JWT
-  const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-  res.json({ token });
-});
-
-// Rota inicial
-app.get("/", (req, res) => {
-  res.send("API da aplicação financeira está rodando!");
 });
 
 // Inicia o servidor
