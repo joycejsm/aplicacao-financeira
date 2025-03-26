@@ -1,9 +1,9 @@
 import { useState, useContext } from "react";
-import { GastosContext } from "./GastosContext";
+import { useAuth } from "../context/AuthContext"; // Ajuste para usar o AuthContext
 import api from "../api"; // Importa a API configurada com Axios
 
 const AdicionarGasto = () => {
-  const { adicionarGasto } = useContext(GastosContext);
+  const { adicionarGasto } = useAuth(); // Use o AuthContext
   const [descricao, setDescricao] = useState("");
   const [valor, setValor] = useState("");
   const [categoria, setCategoria] = useState("");
@@ -11,7 +11,6 @@ const AdicionarGasto = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       // 🚀 Faz a requisição POST para a API
       const response = await api.post("/gastos", {
@@ -20,10 +19,8 @@ const AdicionarGasto = () => {
         categoria,
         data,
       });
-
       // Atualiza o contexto com o novo gasto
       adicionarGasto(response.data);
-
       // Limpa os campos
       setDescricao("");
       setValor("");
