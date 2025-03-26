@@ -1,14 +1,12 @@
 import { useState, useContext } from "react";
-import { useAuth } from "../context/AuthContext"; // Ajuste para usar o AuthContext
+import { GastosContext } from "./GastosContext";
 import api from "../api"; // Importa a API configurada com Axios
-
 const AdicionarGasto = () => {
-  const { adicionarGasto } = useAuth(); // Use o AuthContext
+  const { adicionarGasto } = useContext(GastosContext);
   const [descricao, setDescricao] = useState("");
   const [valor, setValor] = useState("");
   const [categoria, setCategoria] = useState("");
   const [data, setData] = useState("");
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -30,7 +28,6 @@ const AdicionarGasto = () => {
       console.error("Erro ao adicionar gasto:", error);
     }
   };
-
   return (
     <form onSubmit={handleSubmit}>
       <input type="text" placeholder="Descrição" value={descricao} onChange={(e) => setDescricao(e.target.value)} required />
@@ -47,5 +44,4 @@ const AdicionarGasto = () => {
     </form>
   );
 };
-
 export default AdicionarGasto;
