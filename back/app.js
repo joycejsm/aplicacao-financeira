@@ -14,4 +14,5 @@ app.use("/api/users", userRoutes)
 app.use("/amizades", amizadeRoutes)
 app.use("/gastos-compartilhados", gastoCompartilhadoRoutes);
 
+
 module.exports = app;

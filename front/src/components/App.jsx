@@ -1,6 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate, Link } from "react-router-dom";
 import { useState } from "react";
-import { AuthProvider } from "../context/AuthContext"; // Importa o AuthProvider
 import AdicionarGasto from "./AdicionarGasto";
 import ListaGastos from "./ListaGastos";
 import GraficoGastos from "./GraficoGastos";

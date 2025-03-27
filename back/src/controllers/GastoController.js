@@ -3,12 +3,16 @@ const GastoModel = require("../models/Gasto");
 const GastoController = {
   getAll: async (req, res) => {
     try {
+      console.log("🔍 DEBUG req.user:", req.user); // Verifica se vem certo
+  
       const gastos = await GastoModel.findAllByUserId(req.user.id);
       res.json(gastos);
     } catch (error) {
-      res.status(500).json({ error: "Erro ao buscar gastos" });
+      console.error("ERRO AO BUSCAR GASTOS:", error); // Loga o erro real
+      res.status(500).json({ error: "Erro ao buscar gastos", details: error.message });
     }
   },
+
   getById: async (req, res) => {
     try {
       const gasto = await GastoModel.findByIdAndUserId(req.params.id, req.user.id);
