@@ -14,35 +14,36 @@ ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
 const GraficoGastos = () => {
   const { gastos } = useContext(GastosContext);
-  const [categoriaSelecionada, setCategoriaSelecionada] = useState("todas");
 
-  // 🔹 Categorias únicas
-  const categorias = ["todas", ...new Set(gastos.map((g) => g.categoria))];
+  const categorias = [...new Set(gastos.map((g) => g.categoria))];
+  const [categoriasSelecionadas, setCategoriasSelecionadas] = useState(categorias);
 
-  // 🔹 Filtra os gastos pela categoria
-  const gastosFiltrados =
-    categoriaSelecionada === "todas"
-      ? gastos
-      : gastos.filter((g) => g.categoria === categoriaSelecionada);
+  // ✅ Lidar com seleção/desseleção de categoria
+  const toggleCategoria = (categoria) => {
+    if (categoriasSelecionadas.includes(categoria)) {
+      setCategoriasSelecionadas(categoriasSelecionadas.filter((c) => c !== categoria));
+    } else {
+      setCategoriasSelecionadas([...categoriasSelecionadas, categoria]);
+    }
+  };
 
-  // 🔹 Agrupa os valores por categoria (inclusive para o modo "todas")
-  const categoriasParaExibir = [...new Set(gastosFiltrados.map((g) => g.categoria))];
-  const valoresPorCategoria = categoriasParaExibir.map((categoria) =>
-    gastosFiltrados
+  // ✅ Filtrar categorias visíveis
+  const categoriasFiltradas = categorias.filter((c) => categoriasSelecionadas.includes(c));
+
+  // ✅ Calcular os valores apenas das categorias selecionadas
+  const valoresPorCategoria = categoriasFiltradas.map((categoria) =>
+    gastos
       .filter((g) => g.categoria === categoria)
       .reduce((total, gasto) => total + gasto.valor, 0)
   );
 
   const data = {
-    labels: categoriasParaExibir,
+    labels: categoriasFiltradas,
     datasets: [
       {
-        label:
-          categoriaSelecionada === "todas"
-            ? "Gastos por Categoria"
-            : `Gastos - ${categoriaSelecionada}`,
+        label: "Gastos por Categoria",
         data: valoresPorCategoria,
-        backgroundColor: "#36A2EB",
+        backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0","#646cff"]
       },
     ],
   };
@@ -51,20 +52,21 @@ const GraficoGastos = () => {
     <div>
       <h2>Gráfico de Gastos</h2>
 
-      {/* 🔹 Dropdown de categorias */}
-      <select
-        value={categoriaSelecionada}
-        onChange={(e) => setCategoriaSelecionada(e.target.value)}
-        style={{ marginBottom: "1rem" }}
-      >
-        {categorias.map((cat) => (
-          <option key={cat} value={cat}>
-            {cat.charAt(0).toUpperCase() + cat.slice(1)}
-          </option>
+      {/* ✅ Checkboxes para controle */}
+      <div style={{ marginBottom: "1rem" }}>
+        {categorias.map((categoria) => (
+          <label key={categoria} style={{ marginRight: "1rem" }}>
+            <input
+              type="checkbox"
+              checked={categoriasSelecionadas.includes(categoria)}
+              onChange={() => toggleCategoria(categoria)}
+            />
+            {categoria}
+          </label>
         ))}
-      </select>
+      </div>
 
-      {/* 🔹 Gráfico */}
+      {/* ✅ Gráfico com categorias filtradas */}
       <Bar data={data} />
     </div>
   );

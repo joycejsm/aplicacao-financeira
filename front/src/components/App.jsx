@@ -9,7 +9,7 @@ import "./styles.css";
 import { useAuth } from "../AuthContext.jsx";
 
 const App = () => {
-  const{user, logout} = useAuth(); // Estado de autenticação
+  const { user, logout } = useAuth(); // Estado de autenticação
 
   return (
     <Router>
@@ -21,11 +21,15 @@ const App = () => {
         </Routes>
       ) : (
         <>
-          <nav>
-            <Link to="/">Adicionar Gasto</Link>
-            <Link to="/lista">Lista de Gastos</Link>
-            <Link to="/relatorios">Relatórios</Link>
-            <button onClick={logout}>Sair</button>
+          <nav className="navbar">
+            <div className="navbar-container">
+              <div className="navbar-links">
+                <Link to="/">Adicionar Gasto</Link>
+                <Link to="/lista">Lista de Gastos</Link>
+                <Link to="/relatorios">Relatórios</Link>
+              </div>
+              <button onClick={logout}>Sair</button>
+            </div>
           </nav>
           <div className="container">
             <Routes>

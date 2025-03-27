@@ -10,15 +10,13 @@ const AdicionarGasto = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // 🚀 Faz a requisição POST para a API
-      const response = await api.post("/gastos", {
+      await adicionarGasto({
         descricao,
         valor: Number(valor),
         categoria,
         data,
       });
-      // Atualiza o contexto com o novo gasto
-      adicionarGasto(response.data);
+
       // Limpa os campos
       setDescricao("");
       setValor("");
@@ -28,6 +26,7 @@ const AdicionarGasto = () => {
       console.error("Erro ao adicionar gasto:", error);
     }
   };
+
   return (
     <form onSubmit={handleSubmit}>
       <input type="text" placeholder="Descrição" value={descricao} onChange={(e) => setDescricao(e.target.value)} required />
@@ -35,6 +34,7 @@ const AdicionarGasto = () => {
       <input type="date" value={data} onChange={(e) => setData(e.target.value)} required />
       <select value={categoria} onChange={(e) => setCategoria(e.target.value)} required>
         <option value="">Escolha a categoria</option>
+        <option value="Custos Fixos">Custos Fixo</option>
         <option value="Alimentação">Alimentação</option>
         <option value="Transporte">Transporte</option>
         <option value="Lazer">Lazer</option>
