@@ -1,14 +1,14 @@
 const GastoModel = require("../models/Gasto");
+const { PrismaClient } = require("@prisma/client");
+const prisma = new PrismaClient();
 
 const GastoController = {
   getAll: async (req, res) => {
     try {
-      console.log("🔍 DEBUG req.user:", req.user); // Verifica se vem certo
-  
       const gastos = await GastoModel.findAllByUserId(req.user.id);
       res.json(gastos);
     } catch (error) {
-      console.error("ERRO AO BUSCAR GASTOS:", error); // Loga o erro real
+      console.error("ERRO AO BUSCAR GASTOS:", error);
       res.status(500).json({ error: "Erro ao buscar gastos", details: error.message });
     }
   },
@@ -24,6 +24,7 @@ const GastoController = {
       res.status(500).json({ error: "Erro ao buscar gasto" });
     }
   },
+
   create: async (req, res) => {
     try {
       const { descricao, valor, categoria, data } = req.body;
@@ -39,6 +40,7 @@ const GastoController = {
       res.status(500).json({ error: "Erro ao adicionar gasto" });
     }
   },
+
   delete: async (req, res) => {
     try {
       const gasto = await GastoModel.findByIdAndUserId(req.params.id, req.user.id);

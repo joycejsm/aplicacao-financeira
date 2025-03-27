@@ -1,48 +1,24 @@
-import React, { useState, useEffect, useContext } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect, useContext } from "react";
 import { useAuth } from "../AuthContext";
-import { GastosContext } from './GastosContext';
+import { GastosContext } from "./GastosContext";
+import api from "../api";
 
 const GastosCompartilhados = () => {
   const { user } = useAuth();
   const { refreshGastos } = useContext(GastosContext);
+
   const [gastosCompartilhados, setGastosCompartilhados] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [amigos, setAmigos] = useState([]);
 
-  // Busca os amigos do usuário
-  const fetchAmigos = async () => {
-    try {
-      const response = await axios.get('/api/amigos', {
-        headers: { Authorization: `Bearer ${user.token}` }
-      });
-      setAmigos(response.data);
-    } catch (err) {
-      console.error('Erro ao buscar amigos:', err);
-    }
-  };
-
-  // Busca os gastos compartilhados
   const fetchGastosCompartilhados = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('/api/gastos/compartilhados_comigo', {
-        headers: { Authorization: `Bearer ${user.token}` }
-      });
-      
-      // Filtra apenas gastos de amigos (opcional, pode ser feito no backend)
-      const gastosDeAmigos = response.data.filter(gasto => 
-        amigos.some(amigo => 
-          amigo.id === gasto.gasto.payerId || 
-          amigo.id === gasto.gasto.beneficiarioId
-        )
-      );
-      
-      setGastosCompartilhados(gastosDeAmigos);
+      const response = await api.get("/gastos-compartilhados/compartilhados_comigo");
+      setGastosCompartilhados(response.data);
     } catch (err) {
-      console.error('Erro ao buscar gastos compartilhados:', err);
-      setError('Erro ao carregar gastos compartilhados');
+      console.error("Erro ao buscar gastos compartilhados:", err);
+      setError("Erro ao carregar gastos compartilhados");
     } finally {
       setLoading(false);
     }
@@ -50,70 +26,45 @@ const GastosCompartilhados = () => {
 
   useEffect(() => {
     if (user) {
-      fetchAmigos().then(fetchGastosCompartilhados);
+      fetchGastosCompartilhados();
     }
   }, [user, refreshGastos]);
 
-  const handleAceitarGasto = async (gastoId) => {
+  const atualizarStatus = async (id, acao) => {
     try {
-      await axios.put(`/api/gastos/compartilhados/${gastoId}/aceitar`, {}, {
-        headers: { Authorization: `Bearer ${user.token}` }
-      });
+      await api.put(`/gastos/compartilhados/${id}/${acao}`);
       fetchGastosCompartilhados();
     } catch (err) {
-      console.error('Erro ao aceitar gasto:', err);
+      console.error(`Erro ao ${acao} gasto:`, err);
     }
   };
 
-  const handleRecusarGasto = async (gastoId) => {
-    try {
-      await axios.put(`/api/gastos/compartilhados/${gastoId}/recusar`, {}, {
-        headers: { Authorization: `Bearer ${user.token}` }
-      });
-      fetchGastosCompartilhados();
-    } catch (err) {
-      console.error('Erro ao recusar gasto:', err);
-    }
-  };
-
-  if (loading) {
-    return <div className="loading">Carregando...</div>;
-  }
-
-  if (error) {
-    return <div className="error">{error}</div>;
-  }
+  if (loading) return <div className="loading">Carregando...</div>;
+  if (error) return <div className="error">{error}</div>;
 
   return (
     <div className="gastos-compartilhados">
       <h2>Gastos Compartilhados com Você</h2>
-      
       {gastosCompartilhados.length === 0 ? (
         <p>Nenhum gasto compartilhado encontrado</p>
       ) : (
         <ul className="lista-gastos">
-          {gastosCompartilhados.map((gastoCompartilhado) => (
-            <li key={gastoCompartilhado.id} className="gasto-item">
+          {gastosCompartilhados.map((item) => (
+            <li key={item.id} className="gasto-item">
               <div className="gasto-info">
-                <h3>{gastoCompartilhado.gasto.descricao}</h3>
-                <p>Valor: R$ {gastoCompartilhado.valor.toFixed(2)}</p>
-                <p>Pago por: {gastoCompartilhado.gasto.payer?.name || 'Usuário desconhecido'}</p>
-                <p>Data: {new Date(gastoCompartilhado.gasto.data).toLocaleDateString()}</p>
-                <p>Status: {gastoCompartilhado.status}</p>
+                <h3>{item.gasto.descricao}</h3>
+                <p>Valor: R$ {item.valor?.toFixed(2) || item.gasto.valor.toFixed(2)}</p>
+                <p>Pago por: {item.gasto.payer?.name || "Você"}</p>
+                <p>Data: {new Date(item.gasto.data).toLocaleDateString()}</p>
+                <p>Status: {item.status}</p>
               </div>
-              
-              {gastoCompartilhado.status === 'Pendente' && (
+
+              {item.status === "Pendente" && (
                 <div className="gasto-actions">
-                  <button 
-                    onClick={() => handleAceitarGasto(gastoCompartilhado.id)}
-                    className="btn-aceitar"
-                  >
+                  <button onClick={() => atualizarStatus(item.id, "aceitar")} className="btn-aceitar">
                     Aceitar
                   </button>
-                  <button 
-                    onClick={() => handleRecusarGasto(gastoCompartilhado.id)}
-                    className="btn-recusar"
-                  >
+                  <button onClick={() => atualizarStatus(item.id, "recusar")} className="btn-recusar">
                     Recusar
                   </button>
                 </div>

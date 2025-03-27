@@ -179,6 +179,23 @@ p a:hover {
   font-size: 14px;
   text-align: center;
 }
+.btn-gasto-compartilhado {
+  padding: 14px;
+  font-size: 16px;
+  background: linear-gradient(135deg, #00b894, #00cec9);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+  margin-top: 10px;
+}
+
+.btn-gasto-compartilhado:hover {
+  background: linear-gradient(135deg, #00a383, #009c9e);
+  transform: scale(1.02);
+}
 
 /* Responsivo */
 @media (max-width: 600px) {
@@ -197,3 +214,4 @@ p a:hover {
     text-align: center;
   }
 }
+
