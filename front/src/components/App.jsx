@@ -1,15 +1,15 @@
 import { BrowserRouter as Router, Routes, Route, Navigate, Link } from "react-router-dom";
-import { useState } from "react";
 import AdicionarGasto from "./AdicionarGasto";
 import ListaGastos from "./ListaGastos";
 import GraficoGastos from "./GraficoGastos";
+import GastosCompartilhados from "./GastosCompartilhados";
 import Login from "./Login";
 import Cadastro from "./Cadastro";
 import "./styles.css";
 import { useAuth } from "../AuthContext.jsx";
 
 const App = () => {
-  const { user, logout } = useAuth(); // Estado de autenticação
+  const { user, logout } = useAuth();
 
   return (
     <Router>
@@ -27,15 +27,18 @@ const App = () => {
                 <Link to="/">Adicionar Gasto</Link>
                 <Link to="/lista">Lista de Gastos</Link>
                 <Link to="/relatorios">Relatórios</Link>
+                <Link to="/compartilhados">Compartilhados</Link> {/* ✅ novo link */}
               </div>
               <button onClick={logout}>Sair</button>
             </div>
           </nav>
+
           <div className="container">
             <Routes>
               <Route path="/" element={<AdicionarGasto />} />
               <Route path="/lista" element={<ListaGastos />} />
               <Route path="/relatorios" element={<GraficoGastos />} />
+              <Route path="/compartilhados" element={<GastosCompartilhados />} /> {/* ✅ nova rota */}
               <Route path="*" element={<Navigate to="/" />} />
             </Routes>
           </div>

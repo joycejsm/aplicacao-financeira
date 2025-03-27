@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
-import { useAuth } from './AuthContext';
+import { useAuth } from "../AuthContext";
 import { GastosContext } from './GastosContext';
 
 const GastosCompartilhados = () => {
