@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate, Link } from "react-ro
 import { useState } from "react";
 import AdicionarGasto from "./AdicionarGasto";
 import ListaGastos from "./ListaGastos";
+import GastosCompartilhados from "./GastosCompartilhados.jsx";
 import GraficoGastos from "./GraficoGastos";
 import Login from "./Login";
 import Cadastro from "./Cadastro";
@@ -24,6 +25,7 @@ const App = () => {
           <nav>
             <Link to="/">Adicionar Gasto</Link>
             <Link to="/lista">Lista de Gastos</Link>
+            <Link to="/compartilhados">Gastos Compartilhados</Link> 
             <Link to="/relatorios">Relatórios</Link>
             <button onClick={logout}>Sair</button>
           </nav>
@@ -31,6 +33,7 @@ const App = () => {
             <Routes>
               <Route path="/" element={<AdicionarGasto />} />
               <Route path="/lista" element={<ListaGastos />} />
+              <Route path="/compartilhados" element={<GastosCompartilhados />} />
               <Route path="/relatorios" element={<GraficoGastos />} />
               <Route path="*" element={<Navigate to="/" />} />
             </Routes>
