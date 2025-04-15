@@ -1,102 +1,217 @@
-/* Estilo geral */
+/* Reset básico */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Estilo global */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 0;
-    display: flex;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #e0eafc, #cfdef3);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Container das páginas (como AdicionarGasto) */
+.container {
+  background-color: #ffffff;
+  padding: 40px 30px;
+  border-radius: 15px;
+  max-width: 500px;
+  width: 90%;
+  margin-top: 60px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.container:hover {
+  transform: translateY(-2px);
+}
+
+/* NAVBAR BONITA E CENTRALIZADA */
+.navbar {
+  width: 100%;
+  background-color: #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  padding: 1rem 0;
+  display: flex;
+  justify-content: center;
+}
+
+.navbar-container {
+  width: 100%;
+  max-width: 1000px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2rem;
+  flex-wrap: wrap;
+}
+
+.navbar-links {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.navbar-links a {
+  text-decoration: none;
+  color: #007bff;
+  font-weight: 600;
+  font-size: 16px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.navbar-links a:hover {
+  background-color: #e6f0ff;
+  color: #0056b3;
+}
+
+.navbar-container button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.navbar-container button:hover {
+  background-color: #0056b3;
+  transform: scale(1.03);
+}
+
+
+/* Título */
+.container h2,
+.auth-container h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  font-size: 26px;
+  color: #1a1a1a;
+}
+
+/* Formulário */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Inputs e selects */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="date"],
+select {
+  padding: 12px 14px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  background-color: #fdfdfd;
+}
+
+input:focus,
+select:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+  outline: none;
+}
+
+/* Botão de submit */
+button[type="submit"] {
+  padding: 14px;
+  font-size: 16px;
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+button[type="submit"]:hover {
+  background: linear-gradient(135deg, #0056b3, #003f88);
+  transform: scale(1.02);
+}
+
+/* Link de login */
+p {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 14px;
+  color: #555;
+}
+
+p a {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+p a:hover {
+  text-decoration: underline;
+}
+
+/* Mensagem de erro */
+.error-message {
+  background-color: #ffebeb;
+  color: #d10000;
+  border: 1px solid #ffa0a0;
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 15px;
+  font-size: 14px;
+  text-align: center;
+}
+.btn-gasto-compartilhado {
+  padding: 14px;
+  font-size: 16px;
+  background: linear-gradient(135deg, #00b894, #00cec9);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+  margin-top: 10px;
+}
+
+.btn-gasto-compartilhado:hover {
+  background: linear-gradient(135deg, #00a383, #009c9e);
+  transform: scale(1.02);
+}
+
+/* Responsivo */
+@media (max-width: 600px) {
+  .navbar-container {
     flex-direction: column;
-    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
   }
-  
-  /* Container principal */
-  .container {
-    width: 90%;
-    max-width: 600px;
-    background: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    margin-top: 20px;
-  }
-  
-  /* Estilização do formulário */
-  form {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  input, select, button {
-    margin: 10px 0;
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-  }
-  
-  button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    cursor: pointer;
-    transition: background 0.3s;
-  }
-  
-  button:hover {
-    background-color: #0056b3;
-  }
-  
-  /* Lista de Gastos */
-  ul {
-    list-style: none;
-    padding: 0;
-  }
-  
-  li {
-    background: #f9f9f9;
-    margin: 5px 0;
-    padding: 10px;
-    border-radius: 5px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  /* Navegação */
-  nav {
-    display: flex;
+
+  .navbar-links {
     justify-content: center;
-    gap: 15px;
-    margin-bottom: 20px;
   }
-  
-  nav a {
-    text-decoration: none;
-    padding: 10px 15px;
-    background: #007bff;
-    color: white;
-    border-radius: 5px;
-    transition: background 0.3s;
+
+  .navbar-container button {
+    width: 100%;
+    text-align: center;
   }
-  
-  nav a:hover {
-    background: #0056b3;
-  }
-  
-  /* Responsividade */
-  @media (max-width: 600px) {
-    .container {
-      width: 100%;
-      padding: 15px;
-    }
-  
-    nav {
-      flex-direction: column;
-      gap: 10px;
-    }
-  
-    nav a {
-      text-align: center;
-    }
-  }
-  
+}
+

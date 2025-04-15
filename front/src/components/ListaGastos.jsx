@@ -10,7 +10,7 @@ const ListaGastos = () => {
       <ul>
         {gastos.length > 0 ? (
           gastos.map((gasto, index) => (
-            <li key={index}>
+            <li key={gasto.id}>
               {gasto.descricao} - R$ {gasto.valor.toFixed(2)} ({gasto.categoria}) em {gasto.data}
             </li>
           ))
@@ -23,4 +23,3 @@ const ListaGastos = () => {
 };
 
 export default ListaGastos;
-

@@ -5,16 +5,63 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  relationMode = "prisma"
 }
 
 model Gasto {
-  id        String   @id @default(uuid())
-  descricao String
-  valor     Float
-  categoria String
-  data      DateTime @default(now())
+  id               String   @id @default(uuid())
+  descricao        String
+  valor            Float
+  categoria        String
+  data             DateTime @default(now())
+  userId           Int                          // 👈 Adicionado
+  user             User     @relation("UserGastos", fields: [userId], references: [id])
+  payerId          Int?     
+  payer            User?     @relation("Pagador", fields: [payerId], references: [id])
+  beneficiarioId   Int?     
+  beneficiario     User?     @relation("Beneficiario", fields: [beneficiarioId], references: [id])
+  compartilhadoCom GastoCompartilhado[]
 }
 
+
 model User {
-  
+  id                 Int       @id @default(autoincrement())
+  name               String
+  email              String    @unique
+  password           String
+  amigos1            Amizade[] @relation("User1Amizade")
+  amigos2            Amizade[] @relation("User2Amizade")
+  createdAt          DateTime  @default(now())
+
+  // 👇 RELAÇÃO NOVA (entre Gasto.user e User.gastos)
+  gastos             Gasto[]   @relation("UserGastos")
+
+  // RELAÇÕES EXISTENTES (mantidas)
+  gastosComoPagador  Gasto[]   @relation("Pagador")
+  gastosComoDono     Gasto[]   @relation("Beneficiario")
+  GastoCompartilhado GastoCompartilhado[]
+}
+
+
+
+model GastoCompartilhado {
+  id       String   @id @default(uuid())
+  userId   Int
+  user     User     @relation(fields: [userId], references: [id])
+  gastoId  String
+  gasto    Gasto    @relation(fields: [gastoId], references: [id])
+  valor    Float
+  criadoEm DateTime @default(now())
+  status   String   @default("Pendente")
+}
+
+
+model Amizade {
+  id        String   @id @default(uuid())
+  user1     User     @relation("User1Amizade", fields: [user1Id], references: [id])
+  user1Id   Int
+  user2     User     @relation("User2Amizade", fields: [user2Id], references: [id])
+  user2Id   Int
+  createdAt DateTime @default(now())
+  status    String   @default("Aceito")
 }

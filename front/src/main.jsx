@@ -1,12 +1,17 @@
 import React from "react";
-import { createRoot } from "react-dom/client"; // Correção na importação
+import { createRoot } from "react-dom/client"; // Correto
 import App from "./components/App";
 import { GastosProvider } from "./components/GastosContext";
+import { AuthProvider } from "./AuthContext";
 
-createRoot(document.getElementById("root")).render(
+const root = createRoot(document.getElementById('root')); // Usando createRoot direto
+root.render(
   <React.StrictMode>
-    <GastosProvider>
-      <App />
-    </GastosProvider>
+    <AuthProvider>
+      <GastosProvider>
+        <App />
+      </GastosProvider>
+    </AuthProvider>
   </React.StrictMode>
 );
+
