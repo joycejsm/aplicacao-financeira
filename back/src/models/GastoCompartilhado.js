@@ -30,22 +30,16 @@ const GastoCompartilhadoModel = {
     });
   },
 
-  updateStatus: async (id, status) => {
-    return prisma.gastoCompartilhado.update({
-      where: { id },
-      data: { status },
-      include: {
-        gasto: {
-          include: {
-            payer: true,
-            beneficiario: true
-          }
-        }
-      }
+  updateStatus: async (id, userId, status) => {
+    return prisma.gastoCompartilhado.updateMany({
+      where: {
+        id,
+        userId
+      },
+      data: { status }
     });
   },
 
-  // Novo método para verificar se o usuário pode aceitar/recusar o gasto
   verificarPermissao: async (userId, gastoCompartilhadoId) => {
     return prisma.gastoCompartilhado.findFirst({
       where: {

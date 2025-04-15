@@ -1,12 +1,15 @@
 const express = require("express");
-const GastoCompartilhadoController = require("../controllers/GastoCompartilhado");
+const router = express.Router();
+const GastoCompartilhadoController = require("../controllers/GastoCompartilhado"); 
 const authenticateToken = require("../middlewares/authenticateUser");
 
-const router = express.Router();
-
+// Rotas corretas
 router.get("/compartilhados_comigo", authenticateToken, GastoCompartilhadoController.list);
 router.get("/compartilhados_comigo/:id", authenticateToken, GastoCompartilhadoController.findById);
-// routes/gastosCompartilhados.js
-router.put('/:id/aceitar', authenticateToken, GastoCompartilhadoController.aceitarGasto);
-router.put('/:id/recusar', authenticateToken, GastoCompartilhadoController.recusarGasto);
+router.put("/compartilhados_comigo/:id/aceitar", authenticateToken, GastoCompartilhadoController.aceitar);
+router.put("/compartilhados_comigo/:id/recusar", authenticateToken, GastoCompartilhadoController.recusar);
+
+// Criação do gasto compartilhado
+router.post("/", authenticateToken, GastoCompartilhadoController.create);
+
 module.exports = router;
