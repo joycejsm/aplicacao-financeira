@@ -6,8 +6,9 @@ import GraficoGastos from "./GraficoGastos";
 import GastosCompartilhados from "./GastosCompartilhados";
 import Login from "./Login";
 import Cadastro from "./Cadastro";
-import "./styles.css";
+// import "./styles.css";
 import { useAuth } from "../AuthContext.jsx";
+import "./App.css"
 
 const App = () => {
   const { user, logout } = useAuth();
