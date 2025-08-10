@@ -44,7 +44,7 @@ const GastosCompartilhados = () => {
 
   return (
     <div className="gastos-compartilhados">
-      <h2>Gastos Compartilhados com Você</h2>
+      <h2>Gastos compartilhados com amigos</h2>
       {gastosCompartilhados.length === 0 ? (
         <p>Nenhum gasto compartilhado encontrado</p>
       ) : (
