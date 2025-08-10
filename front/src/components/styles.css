@@ -98,13 +98,24 @@ body {
 
 
 /* Título */
-.container h2,
-.auth-container h2 {
+.container h2{
   text-align: center;
   margin-bottom: 25px;
   font-size: 26px;
   color: #1a1a1a;
 }
+.auth-container h2 {
+  text-align: center;
+  margin-top: 9rem;
+  margin-bottom: 2rem;
+  font-size: 26px;
+  color: #1a1a1a;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
 
 /* Formulário */
 form {
