@@ -48,8 +48,8 @@ Na versão atual, essa funcionalidade foi parcialmente implementada — sendo po
 
 ### 1️⃣ Clonar o repositório
 ```bash
-git clone https://github.com/seu-usuario/seu-repositorio.git
-cd seu-repositorio
+git clone https://github.com/joycejsm/aplicacao-financeira.git
+cd aplicacao-financeira
 ````
 
 ### 2️⃣ Configuração do Backend
